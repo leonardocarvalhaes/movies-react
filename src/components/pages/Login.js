@@ -75,8 +75,8 @@ const Login = (props) => {
 			<div className='row'>
 				<div className='col'>
 					<form autoComplete='off' onSubmit={handleSubmit}>
-						<Input ref={usernameRef} title='Username' type='email' name='first-name' handler={setUsername}></Input>
-						<Input ref={passwordRef} title='Password' type='password' name='last-name' handler={setPassword}></Input>
+						<Input ref={usernameRef} title='Username' type='email' name='first-name' onChange={(event) => setUsername(event.target.value)}></Input>
+						<Input ref={passwordRef} title='Password' type='password' name='last-name' onChange={(event) => setPassword(event.target.value)}></Input>
 
 						<input type='submit' className='btn btn-primary' value='Login'></input>
 					</form>
