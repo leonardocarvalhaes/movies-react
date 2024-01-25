@@ -10,22 +10,18 @@ const Movies = (props) => {
 	}
 
 	useEffect(() => {
-		setMovies([
-			{
-				id: 1,
-				title: 'The Matrix',
-				duration: 145,
-				rating: 4.9,
-				realeaseDate: '1999',
-			},
-			{
-				id: 2,
-				title: 'Matrix Reloaded',
-				duration: 152,
-				rating: 4.9,
-				realeaseDate: '2001',
-			}
-		])
+		const headers = new Headers()
+		headers.append('Content-Type', 'application/json')
+
+		const requestOptions = {
+			method: 'GET',
+			headers: headers
+		}
+
+		fetch(`/movies`, requestOptions)
+			.then(response => response.json())
+			.then(data => setMovies(data))
+			.catch(error => console.log(error))
 	}, [])
 
 	return (
@@ -39,7 +35,7 @@ const Movies = (props) => {
 
 			<div className='row'>
 				<div className='col text-center'>
-					<TableList items={movies} formatters={formatters} />
+					<TableList id="movies" items={movies} formatters={formatters} />
 				</div>
 			</div>
 		</div>

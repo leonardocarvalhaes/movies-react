@@ -16,12 +16,12 @@ const TableList = (props) => {
 	return properties ? <table className='table table-rounded table-striped table-hover table-responsive'>
 		<thead>
 			<tr>
-				{columns.map(columnName => <th>{columnName}</th>)}
+				{columns.map(columnName => <th key={props.id + '_' + columnName + '_th'}>{columnName}</th>)}
 			</tr>
 		</thead>
 
 		<tbody>
-			{props.items.map(movie => <TableItem key={movie.id} properties={properties} formatters={props.formatters} item={movie} />)}
+			{props.items.map(item => <TableItem key={props.id + '_' + item.id + '_TableItem'} properties={properties} formatters={props.formatters} item={item} />)}
 		</tbody>
 	</table>
 		: <NothingToShow />

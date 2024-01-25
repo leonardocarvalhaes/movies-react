@@ -1,10 +1,12 @@
 import { useContext, useEffect, useRef, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useOutletContext } from 'react-router-dom';
 import Input from '../common/forms/Input';
 import globalStateContext from '../../contexts/globalStateContext';
+import call from '../../helpers/httpHelper';
 
 const Login = (props) => {
-	const { jwt, setJWT } = useContext(globalStateContext)
+	const { setJWT } = useContext(globalStateContext)
+	const { toggleRefresh } = useOutletContext()
 
 	const navigate = useNavigate()
 
@@ -17,18 +19,30 @@ const Login = (props) => {
 	const handleSubmit = (event) => {
 		event.preventDefault()
 
-		if (!validateForm()) {
-			alert('Provide all the data')
-			return
+		if(!validateForm()) {
+			alert('You forgot to provide something')
 		}
 
-		if (username == 'example@test' && password == '123') {
-			setJWT('showdebola')
-			resetForm()
-			navigate('/')
-		} else {
-			alert('Credentials incorrect')
+		let payload = {
+			email: username,
+			password: password
 		}
+
+		call({url: '/authenticate', method: 'POST', body: payload})
+			.then(data => {
+				if (data.error) {
+					alert(data.message)
+					return
+				}
+
+				setJWT(data.access_token)
+				resetForm()
+				toggleRefresh(true)
+				navigate('/')
+			})
+			.catch(error => {
+				alert(error)
+			})
 	}
 
 	const validateForm = () => {
@@ -48,10 +62,6 @@ const Login = (props) => {
 		usernameRef.current.value = ''
 		passwordRef.current.value = ''
 	}
-
-	useEffect(() => {
-
-	}, [])
 
 	return (
 		<div className='container'>

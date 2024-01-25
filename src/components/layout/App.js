@@ -1,14 +1,61 @@
 import { Link, Outlet } from 'react-router-dom';
 import SideMenu from './SideMenu';
-import { useContext } from 'react';
+import { useCallback, useContext, useEffect, useState } from 'react';
 import globalStateContext from '../../contexts/globalStateContext';
+import call from '../../helpers/httpHelper';
 
 const App = (props) => {
 	const { jwt, setJWT } = useContext(globalStateContext)
 
+	const [refreshInterval, setRefreshInterval] = useState(null)
+
 	const logout = () => {
-		setJWT(null)
+		call({url: '/logout'})
+			.catch(error => {
+				console.log(error)
+			})
+			.finally(() => {
+				toggleRefresh(false)
+				setJWT(null)
+			})
 	}
+
+	const toggleRefresh = useCallback((active) => {
+		if (active) {
+			let interval = setInterval(() => {
+				call({url: '/refresh'})
+					.then(data => {
+						if (data.access_token) {
+							setJWT(data.access_token)
+						}
+					})
+					.catch(error => {
+						console.log(error)
+					})
+
+				setRefreshInterval(interval)
+			}, 60000);
+		} else {
+			setRefreshInterval(null)
+			clearInterval(refreshInterval)
+		}
+	}, [refreshInterval])
+
+	useEffect(() => {
+		if (!jwt) {
+			call({url: '/refresh'})
+				.then(data => {
+					if (data.access_token) {
+						setJWT(data.access_token)
+						toggleRefresh(true)
+					}
+				})
+				.catch(error => {
+					toggleRefresh(false)
+					console.log(error)
+				})
+		}
+	}, [jwt, toggleRefresh])
 
 	return (
 		<div className='container'>
@@ -20,7 +67,7 @@ const App = (props) => {
 				<div className='col d-flex align-items-center justify-content-end'>
 					{
 						jwt ? <Link to='/login' onClick={logout} className='btn'>Logout</Link>
-						: <Link to='/login' className='btn'>Login</Link>
+							: <Link to='/login' className='btn'>Login</Link>
 					}
 				</div>
 			</div>
@@ -31,7 +78,7 @@ const App = (props) => {
 				</div>
 
 				<div className='col-md-10'>
-					<Outlet />
+					<Outlet context={{toggleRefresh}} />
 				</div>
 			</div>
 		</div>

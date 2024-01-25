@@ -15,11 +15,11 @@ const Genres = (props) => {
 				title: 'Comedy',
 			},
 			{
-				id: 2,
+				id: 3,
 				title: 'Romance',
 			},
 			{
-				id: 2,
+				id: 4,
 				title: 'Science',
 			},
 		])
@@ -36,7 +36,7 @@ const Genres = (props) => {
 
 			<div className='row'>
 				<div className='col text-center'>
-					<TableList items={genres} />
+					<TableList id="genres" items={genres} />
 				</div>
 			</div>
 		</div>

@@ -1,12 +1,16 @@
+import React from "react"
+
 const TableItem = (props) => {
 	let item = props.item
 
 	for (const key in props.formatters) {
-		item[key] = props.formatters[key](item)
+		if (!React.isValidElement(item[key])) {
+			item[key] = props.formatters[key](item)
+		}
 	}
 
-	return <tr>
-		{props.properties.map(property => <td>{item[property]}</td>)}
+	return <tr key={item.id + '_tr'}>
+		{props.properties.map(property => <td key={item.id + property}>{item[property]}</td>)}
 	</tr>
 }
 

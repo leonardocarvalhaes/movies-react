@@ -1,24 +1,36 @@
 import { forwardRef } from "react"
 
 const Input = forwardRef((props, ref) => {
+	const defaults = {
+		type: 'text',
+		className: 'form-control'
+	}
+
+	let tagsProperties = { ...defaults, ...props  }
+
+	let input
+
+	if (props.type === 'select') {
+		let options = tagsProperties.options
+		delete tagsProperties.options
+		delete tagsProperties.type
+
+		input = <select ref={ref} {...tagsProperties}>
+			{
+				options.map(
+					option => <option value={option.value}>{option.description}</option>
+				)
+			}
+		</select>
+	} else if (props.type === 'textarea') {
+		input = <textarea ref={ref} {...tagsProperties} />
+	} else {
+		input = <input ref={ref} {...tagsProperties} />
+	}
+
 	return <div className="mb-3">
 		<label htmlFor={props.name} className='form-label'>{props.title}</label>
-		<input
-			ref={ref}
-			type={props.type ? props.type : 'text'}
-			name={props.name}
-			id={props.name}
-			value={props.value}
-			autoComplete={props.name + '-new'}
-			className={props.className ? props.className : 'form-control'}
-			{...(props.readonly && { readOnly: true })}
-			{
-			...(typeof props.handler === 'function' &&
-			{
-				onChange: (event) => props.handler(event.target.value)
-			})
-			}
-		/>
+		{input}
 	</div>
 })
 
