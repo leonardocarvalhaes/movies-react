@@ -8,6 +8,8 @@ import GraphQL from "../components/pages/GraphQL"
 import Catalogue from "../components/pages/Catalogue"
 import Movie from "../components/pages/Movie"
 import Login from "../components/pages/Login"
+import CreateMovie from "../components/pages/CreateMovie"
+import EditMovie from "../components/pages/EditMovie"
 
 const setupRouter = () => {
 	return createBrowserRouter([
@@ -43,8 +45,13 @@ const getRoutesList = () => {
 			label: 'Genres',
 		},
 		{
-			path: '/admin/movies/add/0',
-			element: <Movies />,
+			path: '/admin/movies/create',
+			element: <CreateMovie />,
+			admin: true,
+		},
+		{
+			path: '/admin/movies/:id/edit',
+			element: <EditMovie />,
 			admin: true,
 		},
 		{

@@ -3,6 +3,7 @@ import TableList from "../common/lists/TableList";
 import { Link, useNavigate } from "react-router-dom";
 import globalStateContext from "../../contexts/globalStateContext";
 import call from "../../helpers/httpHelper";
+import { toReadable } from "../../helpers/datesHelper";
 
 const Catalogue = (props) => {
 	const [movies, setCatalogue] = useState([])
@@ -10,7 +11,9 @@ const Catalogue = (props) => {
 	const navigate = useNavigate()
 
 	const formatters = {
-		title: (movie) => <Link className='text-secondary text-decoration-none' to={'/admin/movies/' + movie.id}>{movie.title}</Link>
+		title: (movie) => <Link className='text-secondary text-decoration-none' to={'/admin/movies/' + movie.id + '/edit'}>{movie.title}</Link>,
+		release_date: (movie) => toReadable(movie.release_date),
+		image: (movie) => movie.image && <img src={'https://image.tmdb.org/t/p/w200/' + movie.image} alt="poster" />,
 	}
 
 	useEffect(() => {

@@ -1,26 +1,27 @@
 import { useEffect, useState } from "react";
 import TableList from "../common/lists/TableList";
 import { Link } from "react-router-dom";
+import { toReadable } from "../../helpers/datesHelper";
+import call from "../../helpers/httpHelper";
 
 const Movies = (props) => {
 	const [movies, setMovies] = useState([])
 
 	const formatters = {
-		title: (movie) => <Link className='text-secondary text-decoration-none' to={'/movies/' + movie.id}>{movie.title}</Link>
+		title: (movie) => <Link className='text-secondary text-decoration-none' to={'/movies/' + movie.id}>{movie.title}</Link>,
+		release_date: (movie) => toReadable(movie.release_date)
 	}
 
 	useEffect(() => {
-		const headers = new Headers()
-		headers.append('Content-Type', 'application/json')
+		call({ url: '/movies' })
+			.then(data => {
+				data.forEach(movie => {
+					delete movie['description']
+					delete movie['image']
+				})
 
-		const requestOptions = {
-			method: 'GET',
-			headers: headers
-		}
-
-		fetch(`/movies`, requestOptions)
-			.then(response => response.json())
-			.then(data => setMovies(data))
+				setMovies(data)
+			})
 			.catch(error => console.log(error))
 	}, [])
 

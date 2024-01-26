@@ -18,7 +18,7 @@ const Input = forwardRef((props, ref) => {
 		input = <select ref={ref} {...tagsProperties}>
 			{
 				options.map(
-					option => <option value={option.value}>{option.description}</option>
+					option => <option key={option.value} value={option.value}>{option.description}</option>
 				)
 			}
 		</select>

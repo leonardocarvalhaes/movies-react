@@ -73,7 +73,7 @@ const App = (props) => {
 			</div>
 
 			<div className='row'>
-				<div className='col-md-2'>
+				<div className='col-md-2 pt-2'>
 					<SideMenu />
 				</div>
 
