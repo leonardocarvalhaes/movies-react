@@ -3,9 +3,7 @@
 }
 
 .hover-scale {
-	/* backface-visibility: visible; */
 	transition: transform 150ms ease-in-out;
-	background-color: black;
 }
 
 .hover-scale:hover {
