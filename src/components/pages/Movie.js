@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import call from "../../helpers/httpHelper";
 import { toReadable } from "../../helpers/datesHelper";
 
@@ -7,7 +7,7 @@ const Movie = (props) => {
 	const [movie, setMovie] = useState({
 		title: '',
 		duration: '',
-		rating: '',
+		mpaa_rating: '',
 		release_date: '',
 		image: '',
 		description: '',
@@ -25,23 +25,27 @@ const Movie = (props) => {
 
 	return (
 		<div className='container'>
-			<div className='row'>
+			<div className='row mb-3'>
 				<div className='col'>
-					<h1>{movie.title}</h1>
-					<small><em>{movie.release_date}, Rated <span className="bade bg-warning rounded px-1">{movie.rating}</span>, {movie.duration} minutes</em></small>
-					<hr />
+					<h1>
+						<Link to='/movies' className='btn btn-link text-secondary'><i className="bi bi-arrow-left"></i></Link>
+						{movie.title}
+					</h1>
+					<small><em>{movie.release_date}, Rated <span className="bade bg-warning rounded px-1">{movie.mpaa_rating}</span>, {movie.duration} minutes</em></small>
 				</div>
 			</div>
 
 			<div className='row'>
 				{
 					movie.image &&
-					<div className='col-md-6 text-center'>
-						<img src={'https://image.tmdb.org/t/p/w400/' + movie.image} alt="poster" />
+					<div className='col text-left'>
+						<img className="rounded-5" src={'https://image.tmdb.org/t/p/w500/' + movie.image} alt="poster" />
 					</div>
 				}
+			</div>
 
-				<div className='col-md-6 pl-md-1'>
+			<div className='row mt-3'>
+				<div className='col text-left'>
 					<p>{movie.description}</p>
 				</div>
 			</div>

@@ -1,36 +1,21 @@
 import { useEffect, useState } from "react";
 import TableList from "../common/lists/TableList";
+import call from "../../helpers/httpHelper";
 
 const Genres = (props) => {
 	const [genres, setGenres] = useState([])
 
 	useEffect(() => {
-		setGenres([
-			{
-				id: 1,
-				title: 'Fiction',
-			},
-			{
-				id: 2,
-				title: 'Comedy',
-			},
-			{
-				id: 3,
-				title: 'Romance',
-			},
-			{
-				id: 4,
-				title: 'Science',
-			},
-		])
+		call({ url: '/genres' })
+			.then(data => setGenres(data))
+			.catch(error => console.log(error))
 	}, [])
 
 	return (
 		<div className='container'>
-			<div className='row'>
+			<div className='row mb-3'>
 				<div className='col'>
 					<h1>Genres</h1>
-					<hr />
 				</div>
 			</div>
 

@@ -39,7 +39,7 @@ const App = (props) => {
 			setRefreshInterval(null)
 			clearInterval(refreshInterval)
 		}
-	}, [refreshInterval])
+	}, [refreshInterval, setJWT])
 
 	useEffect(() => {
 		if (!jwt) {
@@ -55,11 +55,11 @@ const App = (props) => {
 					console.log(error)
 				})
 		}
-	}, [jwt, toggleRefresh])
+	}, [jwt, setJWT, toggleRefresh])
 
 	return (
 		<div className='container'>
-			<div className='row mb-5'>
+			<div className='row mb-3'>
 				<div className='col'>
 					<h1 className='mt-3'>Movies App</h1>
 				</div>

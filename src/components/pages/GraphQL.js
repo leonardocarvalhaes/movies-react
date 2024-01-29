@@ -1,10 +1,9 @@
 const GraphQL = () => {
 	return (
 		<div className='container'>
-			<div className='row'>
+			<div className='row mb-3'>
 				<div className='col'>
 					<h1>GraphQL</h1>
-					<hr />
 				</div>
 			</div>
 

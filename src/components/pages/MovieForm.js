@@ -1,18 +1,19 @@
 import { useContext, useEffect, useMemo, useState } from "react";
 import Input from "../common/forms/Input";
 import call from "../../helpers/httpHelper";
-import { toInputDate } from "../../helpers/datesHelper";
+import { toISO, toInputDate } from "../../helpers/datesHelper";
 import globalStateContext from "../../contexts/globalStateContext";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const MovieForm = (props) => {
 	const emptyMovie = useMemo(() => {
 		return {
-			id: '',
+			id: 0,
 			title: '',
 			release_date: '',
-			duration: '',
-			rating: '',
+			duration: 0,
+			mpaa_rating: '',
 			description: '',
 		}
 	}, [])
@@ -24,14 +25,14 @@ const MovieForm = (props) => {
 	const [movie, setMovie] = useState(emptyMovie)
 
 	const mpaaRatingOptions = [
-		{ value: 1, description: 'L' },
-		{ value: 2, description: 'ML' },
-		{ value: 3, description: 'PB13' },
-		{ value: 4, description: 'SF17' },
-		{ value: 5, description: 'R' },
-		{ value: 6, description: '18A' },
-		{ value: 7, description: '18C' },
-		{ value: 8, description: '27X' },
+		{ value: 'L', description: 'L' },
+		{ value: 'ML', description: 'ML' },
+		{ value: 'PG-13', description: 'PG-13' },
+		{ value: 'SF17', description: 'SF17' },
+		{ value: 'R', description: 'R' },
+		{ value: '18A', description: '18A' },
+		{ value: '18C', description: '18C' },
+		{ value: '27X', description: '27X' },
 	]
 
 	useEffect(() => {
@@ -49,10 +50,32 @@ const MovieForm = (props) => {
 		} else {
 			setMovie(emptyMovie)
 		}
-	}, [emptyMovie, props.id])
+	}, [emptyMovie, props.id, jwt, navigate])
 
 	const handleSubmit = (event) => {
 		event.preventDefault()
+
+		const body = {
+			...movie
+		}
+
+		body.release_date = toISO(body.release_date)
+		body.duration = parseInt(body.duration)
+
+		let url = '/admin/movies/create'
+		let method = 'PUT'
+
+		if (movie.id) {
+			url = '/admin/movies/' + movie.id
+			method = 'PATCH'
+		}
+
+		call({ url, method, body, jwt })
+			.then(response => !response.error && navigate('/admin/catalogue'))
+			.catch(error => Swal.fire({
+				title: 'Error',
+				text: error,
+			}))
 	}
 
 	const handleChange = (property) => (event) => {
@@ -64,10 +87,7 @@ const MovieForm = (props) => {
 
 	const deleteMovie = () => {
 		call({ url: '/admin/movies/' + props.id, method: 'DELETE', jwt })
-			.then(data => {
-				data.release_date = toInputDate(data.release_date)
-				setMovie(data)
-			})
+			.then(_ => navigate('/admin/catalogue'))
 			.catch(error => console.log(error))
 	}
 
@@ -75,7 +95,7 @@ const MovieForm = (props) => {
 		<div className='container'>
 			<form autoComplete='off' onSubmit={handleSubmit}>
 				{
-					movie.id && <input type='hidden' value={movie.id} />
+					movie.id ? <input type='hidden' value={movie.id} /> : <></>
 				}
 
 				<div className='row'>
@@ -94,7 +114,7 @@ const MovieForm = (props) => {
 					</div>
 
 					<div className='col-md-6'>
-						<Input name={'rating'} title='Rating' type="select" options={mpaaRatingOptions} value={movie.rating} onChange={handleChange('rating')} />
+						<Input name={'mpaa_rating'} title='Rating' type="select" options={mpaaRatingOptions} value={movie.mpaa_rating} onChange={handleChange('mpaa_rating')} />
 					</div>
 				</div>
 
@@ -108,8 +128,8 @@ const MovieForm = (props) => {
 					<div className='col'>
 						<input type='submit' value={'Save'} className="btn btn-primary" />
 						{
-							movie.id &&
-							<><span className="mx-2"></span><button onClick={deleteMovie} className="btn btn-danger">Delete</button></>
+							!movie.id ? <></>
+							: <><span className="mx-2"></span><Link onClick={deleteMovie} className="btn btn-danger">Delete</Link></>
 						}
 					</div>
 				</div>

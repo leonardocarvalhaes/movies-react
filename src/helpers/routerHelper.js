@@ -10,6 +10,7 @@ import Movie from "../components/pages/Movie"
 import Login from "../components/pages/Login"
 import CreateMovie from "../components/pages/CreateMovie"
 import EditMovie from "../components/pages/EditMovie"
+import ImportMovies from "../components/pages/ImportMovies"
 
 const setupRouter = () => {
 	return createBrowserRouter([
@@ -47,6 +48,11 @@ const getRoutesList = () => {
 		{
 			path: '/admin/movies/create',
 			element: <CreateMovie />,
+			admin: true,
+		},
+		{
+			path: '/admin/movies/import',
+			element: <ImportMovies />,
 			admin: true,
 		},
 		{

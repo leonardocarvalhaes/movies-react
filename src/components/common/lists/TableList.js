@@ -13,10 +13,10 @@ const TableList = (props) => {
 		columns = propertiesToReadable(properties)
 	}
 
-	return properties ? <table className='table table-rounded table-striped table-hover table-responsive'>
+	return properties ? <table className='table table-rounded table-striped table-hover'>
 		<thead>
 			<tr>
-				{columns.map(columnName => <th key={props.id + '_' + columnName + '_th'}>{columnName}</th>)}
+				{columns.map(columnName => <th key={props.id + '_' + columnName + '_th'} className="no-wrap">{columnName}</th>)}
 			</tr>
 		</thead>
 

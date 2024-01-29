@@ -1,4 +1,4 @@
-import { useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import MovieForm from "./MovieForm";
 
 const EditMovie = (props) => {
@@ -6,10 +6,12 @@ const EditMovie = (props) => {
 
 	return (
 		<div className='container'>
-			<div className='row'>
+			<div className='row mb-3'>
 				<div className='col'>
-					<h1>Edit Movie</h1>
-					<hr />
+					<h1>
+						<Link to='/admin/catalogue' className='btn btn-link text-secondary'><i className="bi bi-arrow-left"></i></Link>
+						Edit Movie
+					</h1>
 				</div>
 			</div>
 

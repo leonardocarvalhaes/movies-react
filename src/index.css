@@ -1,0 +1,13 @@
+.no-wrap {
+	white-space: nowrap;
+}
+
+.hover-scale {
+	/* backface-visibility: visible; */
+	transition: transform 150ms ease-in-out;
+	background-color: black;
+}
+
+.hover-scale:hover {
+	transform: scale(1.5);
+}

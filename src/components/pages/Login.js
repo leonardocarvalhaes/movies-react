@@ -68,7 +68,6 @@ const Login = (props) => {
 			<div className='row'>
 				<div className='col'>
 					<h1>Login</h1>
-					<hr />
 				</div>
 			</div>
 
